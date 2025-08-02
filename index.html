@@ -63,7 +63,7 @@
   async function getBotResponse(message) {
     const response = await fetch(HF_API, {
       method: 'POST',
-      headers: { Authorization: 'Bearer ' + '' }, // Aquí puedes dejar vacío o poner tu token si tienes
+      headers: { Authorization: 'Bearer ' + '' }, // Puedes dejar vacío o poner tu token si tienes
       body: JSON.stringify({ inputs: { text: message } }),
     });
     if (!response.ok) return "Lo siento, algo falló en la IA.";
@@ -73,11 +73,8 @@
     return "No entiendo eso, intenta otra cosa.";
   }
 
-  // Función para usar TTS gratuita (demo Uberduck)
-  async function textToSpeech(text) {
-    // Demo Uberduck API (sin autenticación)
-    const url = 'https://api.uberduck.ai/speak-synchronous'; // Necesita API Key, pero no la tenemos
-    // Como no tenemos API Key, haremos un truco para usar el SpeechSynthesis del navegador
+  // Función para usar TTS gratuita (SpeechSynthesis del navegador)
+  function textToSpeech(text) {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'es-ES';
     utterance.rate = 1;
