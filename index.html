@@ -48,7 +48,6 @@
   const input = document.getElementById('input');
   const sendBtn = document.getElementById('sendBtn');
 
-  // Función para añadir mensajes al chat
   function addMessage(text, sender) {
     const div = document.createElement('div');
     div.classList.add('message', sender);
@@ -57,23 +56,30 @@
     chat.scrollTop = chat.scrollHeight;
   }
 
-  // API gratuita de Hugging Face para un chatbot simple
   const HF_API = 'https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium';
+  const HF_TOKEN = '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';
 
   async function getBotResponse(message) {
-    const response = await fetch(HF_API, {
-      method: 'POST',
-      headers: { Authorization: 'Bearer ' + '' }, // Puedes dejar vacío o poner tu token si tienes
-      body: JSON.stringify({ inputs: { text: message } }),
-    });
-    if (!response.ok) return "Lo siento, algo falló en la IA.";
-    const data = await response.json();
-    if (data.generated_text) return data.generated_text;
-    if (data.error) return "No puedo responder ahora.";
-    return "No entiendo eso, intenta otra cosa.";
+    try {
+      const response = await fetch(HF_API, {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + HF_TOKEN,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ inputs: message })
+      });
+      if (!response.ok) return "Lo siento, algo falló en la IA.";
+      const data = await response.json();
+      // Dependiendo de la respuesta, extraemos el texto generado
+      if (data && data.hasOwnProperty('generated_text')) return data.generated_text;
+      if (Array.isArray(data) && data.length > 0 && data[0].generated_text) return data[0].generated_text;
+      return "No puedo responder ahora.";
+    } catch (e) {
+      return "Error al conectar con la IA.";
+    }
   }
 
-  // Función para usar TTS gratuita (SpeechSynthesis del navegador)
   function textToSpeech(text) {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'es-ES';
@@ -91,8 +97,6 @@
 
     const botResponse = await getBotResponse(userText);
     chat.lastChild.textContent = botResponse;
-
-    // Reproducir respuesta en voz
     textToSpeech(botResponse);
   };
 </script>
