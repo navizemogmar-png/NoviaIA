@@ -48,10 +48,6 @@
   const input = document.getElementById('input');
   const sendBtn = document.getElementById('sendBtn');
 
-  const API_URL = window.location.hostname === 'localhost'
-    ? 'http://localhost:3000/chat'
-    : 'https://74ebab0f-95f5-49ef-9ce5-bbd7585e3c65-00-d94wtwalgmob.riker.replit.dev/chat';
-
   function addMessage(text, sender) {
     const div = document.createElement('div');
     div.classList.add('message', sender);
@@ -62,7 +58,7 @@
 
   async function getBotResponse(message) {
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch('https://74ebab0f-95f5-49ef-9ce5-bbd7585e3c65-00-d94wtwalgmob.riker.replit.dev/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message }),
