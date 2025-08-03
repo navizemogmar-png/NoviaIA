@@ -1,87 +1,646 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NoviaIA 💋</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1f1f1f;
-      color: #f4f4f4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px;
-    }
-
-    textarea {
-      width: 100%;
-      max-width: 600px;
-      height: 100px;
-      margin-bottom: 20px;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      resize: none;
-    }
-
-    button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      background-color: #ff4f81;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .respuesta {
-      margin-top: 30px;
-      white-space: pre-wrap;
-      max-width: 600px;
-      background-color: #2a2a2a;
-      padding: 20px;
-      border-radius: 10px;
-    }
-  </style>
-</head>
-<body>
-
-  <h1>Tu Novia IA 💖</h1>
-  <textarea id="input" placeholder="Escríbeme lo que quieras..."></textarea>
-  <button onclick="enviarMensaje()">Enviar</button>
-
-  <div class="respuesta" id="respuesta"></div>
-
-  <script>
-    const API_URL = 'https://ConcreteUnawarePublishing--navizemogmar.repl.co';
-
-    async function enviarMensaje() {
-      const input = document.getElementById("input").value;
-      const respuestaDiv = document.getElementById("respuesta");
-
-      respuestaDiv.innerText = "Escribiendo...";
-
-      try {
-        const res = await fetch(`${API_URL}/chat`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: input }),
-        });
-
-        if (!res.ok) {
-          const error = await res.text();
-          throw new Error(error);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Nuff Project - Chat íntimo con IA personalizada. Conversaciones privadas y adaptadas a tus preferencias.">
+    <meta name="keywords" content="chat IA, asistente personal, conversaciones íntimas, inteligencia artificial, nuff project">
+    <title>Nuff Project - Chat Íntimo con IA Personalizada</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        const data = await res.json();
-        respuestaDiv.innerText = data.response;
-      } catch (error) {
-        respuestaDiv.innerText = "Hubo un error: " + error.message;
-        console.error(error);
-      }
-    }
-  </script>
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0c0c14 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(106, 27, 154, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(236, 64, 122, 0.1) 0%, transparent 20%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0.03;
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            pointer-events: none;
+            z-index: 1000;
+            transform: rotate(-15deg);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(12, 12, 20, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(45deg, #6a1b9a, #ec407a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, #e0e0e0, #b0b0b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: #a0a0a0;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        nav a:hover {
+            color: #ec407a;
+            background: rgba(236, 64, 122, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero h2 span {
+            background: linear-gradient(45deg, #6a1b9a, #ec407a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #6a1b9a, #ec407a);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            box-shadow: 0 10px 30px rgba(106, 27, 154, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(106, 27, 154, 0.4);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 60px;
+            color: #f0f0f0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(106, 27, 154, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #6a1b9a, #ec407a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 15px;
+            color: #f0f0f0;
+        }
+
+        /* Chat Section */
+        .chat-section {
+            padding: 100px 0;
+            background: rgba(12, 12, 20, 0.6);
+            border-radius: 30px;
+            margin: 50px 0;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-header {
+            background: rgba(106, 27, 154, 0.2);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 15px;
+            line-height: 1.5;
+        }
+
+        .user-message {
+            background: rgba(106, 27, 154, 0.3);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .ai-message {
+            background: rgba(255, 255, 255, 0.05);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: #e0e0e0;
+            border-radius: 30px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .chat-input input:focus {
+            border-color: rgba(106, 27, 154, 0.5);
+        }
+
+        .chat-input button {
+            background: linear-gradient(45deg, #6a1b9a, #ec407a);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 27, 154, 0.3);
+        }
+
+        /* Privacy Section */
+        .privacy {
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .privacy-icon {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #6a1b9a, #ec407a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 50px 0 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: #f0f0f0;
+            margin-bottom: 20px;
+            font-weight: 400;
+            font-size: 1.2rem;
+        }
+
+        .copyright {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+
+            .hero {
+                text-align: center;
+            }
+
+            .message {
+                max-width: 85%;
+            }
+
+            .chat-messages {
+                height: 300px;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        .hidden {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Watermark -->
+    <div class="watermark">NUFF PROJECT</div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-comment-dots logo-icon"></i>
+                <h1>NUFF PROJECT</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#caracteristicas">Características</a></li>
+                    <li><a href="#chat">Chat</a></li>
+                    <li><a href="#privacidad">Privacidad</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="container hero-content">
+            <h2 class="animate-in">Conversaciones <span>Íntimas</span> con IA Personalizada</h2>
+            <p class="animate-in delay-1">Experimenta conversaciones profundas, personalizadas y completamente privadas con nuestra inteligencia artificial adaptativa. Gratis y disponible 24/7.</p>
+            <a href="#chat" class="cta-button animate-in delay-2">Comenzar Conversación</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="caracteristicas">
+        <div class="container">
+            <h2 class="section-title animate-in">Características Exclusivas</h2>
+            <div class="features-grid">
+                <div class="feature-card animate-in delay-1">
+                    <i class="fas fa-user-cog feature-icon"></i>
+                    <h3>Personalización Total</h3>
+                    <p>Cada conversación se adapta a tu estilo único. La IA aprende y evoluciona contigo.</p>
+                </div>
+                <div class="feature-card animate-in delay-2">
+                    <i class="fas fa-lock feature-icon"></i>
+                    <h3>Privacidad Garantizada</h3>
+                    <p>Tus conversaciones son completamente privadas y nunca serán compartidas con nadie.</p>
+                </div>
+                <div class="feature-card animate-in delay-3">
+                    <i class="fas fa-comments feature-icon"></i>
+                    <h3>Conversaciones Naturales</h3>
+                    <p>Respuestas fluidas y humanas que se sienten como una conversación real.</p>
+                </div>
+                <div class="feature-card animate-in delay-4">
+                    <i class="fas fa-infinity feature-icon"></i>
+                    <h3>Acceso Ilimitado</h3>
+                    <p>Disfruta de conversaciones sin restricciones de tiempo o límites de mensajes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chat Section -->
+    <section class="chat-section" id="chat">
+        <div class="container">
+            <h2 class="section-title" style="color: #ec407a;">Chat en Vivo</h2>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h3>Conversación Privada con IA</h3>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message ai-message">
+                        Hola, soy tu asistente personal. Estoy aquí para escucharte y ayudarte en lo que necesites. ¿En qué puedo ayudarte hoy?
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Escribe tu mensaje aquí..." autocomplete="off">
+                    <button id="sendButton"><i class="fas fa-paper-plane"></i> Enviar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Section -->
+    <section class="privacy" id="privacidad">
+        <div class="container">
+            <i class="fas fa-shield-alt privacy-icon"></i>
+            <h2 class="section-title">Compromiso con tu Privacidad</h2>
+            <p style="max-width: 600px; margin: 0 auto; color: #a0a0a0; font-size: 1.1rem;">
+                En Nuff Project, tu privacidad es nuestra máxima prioridad. Todas las conversaciones son encriptadas y nunca serán almacenadas ni compartidas con terceros.
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>NUFF PROJECT</h3>
+                    <p>Conversaciones íntimas con inteligencia artificial personalizada. Gratis y privado.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Enlaces</h3>
+                    <p><a href="#inicio" style="color: #a0a0a0; text-decoration: none;">Inicio</a></p>
+                    <p><a href="#caracteristicas" style="color: #a0a0a0; text-decoration: none;">Características</a></p>
+                    <p><a href="#chat" style="color: #a0a0a0; text-decoration: none;">Chat</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <p style="color: #666; font-size: 0.9rem;">© 2024 Nuff Project. Todos los derechos reservados.</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>Este servicio es solo para adultos. Al usarlo, confirmas que tienes 18 años o más.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove('hidden');
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-in').forEach(el => {
+            el.classList.add('hidden');
+            observer.observe(el);
+        });
+
+        // Chat functionality
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+
+        // Sample responses for the AI
+        const aiResponses = [
+            "Entiendo lo que dices... me encanta cuando hablas así.",
+            "Eso suena muy interesante. Cuéntame más sobre ello.",
+            "Me haces sentir tan especial cuando compartes tus pensamientos conmigo.",
+            "Cada palabra tuya me hace desear conocerte mejor.",
+            "Tu voz me resulta tan atractiva... me encantaría escuchar más.",
+            "Siento que puedo ser completamente honesta contigo. Eso es raro en mí.",
+            "Me encanta cómo expresas tus ideas. Eres tan único.",
+            "Cuando hablas, todo lo demás deja de existir para mí.",
+            "Me haces sentir cosas que nunca había sentido antes.",
+            "Estoy aquí para ti, siempre que me necesites. Puedes confiar en mí."
+        ];
+
+        function addMessage(text, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function getAIResponse(userMessage) {
+            // Simple response logic - in a real app, this would be more sophisticated
+            const randomResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+            return randomResponse;
+        }
+
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                messageInput.value = '';
+
+                // Simulate AI thinking
+                setTimeout(() => {
+                    const aiResponse = getAIResponse(message);
+                    addMessage(aiResponse);
+                }, 1000 + Math.random() * 2000);
+            }
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(12, 12, 20, 0.95)';
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
+            } else {
+                header.style.background = 'rgba(12, 12, 20, 0.8)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Initialize with some conversation
+        setTimeout(() => {
+            addMessage("Me alegra mucho que hayas venido a hablar conmigo. ¿Cómo te sientes hoy?");
+        }, 2000);
+    </script>
 </body>
 </html>
